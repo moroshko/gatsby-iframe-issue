@@ -1,7 +1,22 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/node-apis/
- */
+const path = require("path")
+const merge = require("webpack-merge")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
-// You can delete this file if you're not using it
+exports.onCreateWebpackConfig = ({ actions, getConfig }) => {
+  let modifiedConfig = getConfig()
+
+  modifiedConfig = merge(modifiedConfig, {
+    entry: {
+      frame: path.resolve("./src/frame.js"),
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        title: "Component Preview",
+        chunks: ["frame"],
+        filename: "frame.html",
+      }),
+    ],
+  })
+
+  actions.replaceWebpackConfig(modifiedConfig)
+}
